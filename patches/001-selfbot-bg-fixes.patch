@@ -1,0 +1,26 @@
+diff --git a/playerbot/strategy/actions/BattleGroundJoinAction.cpp b/playerbot/strategy/actions/BattleGroundJoinAction.cpp
+index 041300b..c93d54d 100644
+--- a/playerbot/strategy/actions/BattleGroundJoinAction.cpp
++++ b/playerbot/strategy/actions/BattleGroundJoinAction.cpp
+@@ -393,7 +393,7 @@ bool BGJoinAction::shouldJoinBg(BattleGroundQueueTypeId queueTypeId, BattleGroun
+     if (!hasPlayers && !noLag)
+         return false;
+ 
+-    if (ai->HasRealPlayerMaster())
++    if (ai->HasRealPlayerMaster() && !sRandomPlayerbotMgr.GetValue(bot->GetGUID().GetCounter(), selfbot))
+         return false;
+ 
+ #ifndef MANGOSBOT_ZERO
+diff --git a/playerbot/strategy/actions/ReviveFromCorpseAction.cpp b/playerbot/strategy/actions/ReviveFromCorpseAction.cpp
+index 44a2fa8..332dea8 100644
+--- a/playerbot/strategy/actions/ReviveFromCorpseAction.cpp
++++ b/playerbot/strategy/actions/ReviveFromCorpseAction.cpp
+@@ -207,7 +207,7 @@ bool FindCorpseAction::Execute(Event& event)
+ 
+             moved = MoveTo(moveToPos.getMapId(), moveToPos.getX(), moveToPos.getY(), moveToPos.getZ(), false, false);
+ 
+-            if (!moved && !ai->HasActivePlayerMaster()) //We could not move to coprse. Try spirithealer instead.
++            if (!moved && (!ai->HasActivePlayerMaster() || sRandomPlayerbotMgr.GetValue(bot->GetGUID().GetCounter(), selfbot))) //We could not move to coprse. Try spirithealer instead.
+             {
+                 moved = ai->DoSpecificAction(spirit healer, Event(), true);
+             }

@@ -1,0 +1,12 @@
+diff --git a/playerbot/strategy/actions/CheckMountStateAction.cpp b/playerbot/strategy/actions/CheckMountStateAction.cpp
+index 0000000..0000000 100644
+--- a/playerbot/strategy/actions/CheckMountStateAction.cpp
++++ b/playerbot/strategy/actions/CheckMountStateAction.cpp
+@@ -275,7 +275,7 @@ bool CheckMountStateAction::isUseful()
+ 
+ #ifndef MANGOSBOT_ZERO
+-    if (bot->InArena())
++    if (bot->InArena() || (bot->InBattleGround() && sRandomPlayerbotMgr.GetValue(bot->GetGUID().GetCounter(), selfbot)))
+         return false;
+ #endif
+ 

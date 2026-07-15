@@ -1,0 +1,13 @@
+diff --git a/src/game/Entities/Player.cpp b/src/game/Entities/Player.cpp
+index 2519689..6ac5a9b 100644
+--- a/src/game/Entities/Player.cpp
++++ b/src/game/Entities/Player.cpp
+@@ -1919,7 +1919,7 @@ void Player::ToggleAFK()
+         SetGroupUpdateFlag(GROUP_UPDATE_FLAG_STATUS);
+ 
+     // afk player not allowed in battleground
+-    if (isAFK() && InBattleGround() && !InArena() && !IsGameMaster())
++    if (isAFK() && InBattleGround() && !InArena() && !IsGameMaster() && !GetPlayerbotMgr())
+         LeaveBattleground();
+ 
+     GetSession()->AfkStateChange(isAFK());

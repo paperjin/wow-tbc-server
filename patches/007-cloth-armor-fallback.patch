@@ -1,0 +1,15 @@
+diff --git a/playerbot/PlayerbotFactory.cpp b/playerbot/PlayerbotFactory.cpp
+index 0000000..0000000 100644
+--- a/playerbot/PlayerbotFactory.cpp
++++ b/playerbot/PlayerbotFactory.cpp
+@@ -2548,6 +2548,10 @@ bool PlayerbotFactory::CanEquipArmor(ItemPrototype const* proto)
+     if (bot->HasSkill(SKILL_SHIELD) && proto->SubClass == ITEM_SUBCLASS_ARMOR_SHIELD)
+         return true;
+ 
++    // Cloth fallback - any class can wear cloth
++    if (proto->SubClass == ITEM_SUBCLASS_ARMOR_CLOTH)
++        return true;
++
+     if (bot->HasSkill(SKILL_PLATE_MAIL))
+     {
+         if (proto->SubClass != ITEM_SUBCLASS_ARMOR_PLATE)

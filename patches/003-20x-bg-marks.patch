@@ -1,0 +1,15 @@
+diff --git a/src/game/BattleGround/BattleGround.h b/src/game/BattleGround/BattleGround.h
+index 00d55fd..a288203 100644
+--- a/src/game/BattleGround/BattleGround.h
++++ b/src/game/BattleGround/BattleGround.h
+@@ -82,8 +82,8 @@ enum BattleGroundMarks
+ 
+ enum BattleGroundMarksCount
+ {
+-    ITEM_WINNER_COUNT               = 3,
+-    ITEM_LOSER_COUNT                = 1
++    ITEM_WINNER_COUNT               = 60,
++    ITEM_LOSER_COUNT                = 20
+ };
+ 
+ enum BattleGroundSpells
