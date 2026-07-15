@@ -1,0 +1,60 @@
+services:
+  db:
+    image: docker.io/mariadb:11
+    container_name: tbc-db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: mangos
+      MARIADB_DATABASE: characters
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - tbc-net
+    healthcheck:
+      test: [CMD, mariadb, -u, root, --password=mangos, -e, SELECT 1]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+
+  realmd:
+    image: docker.io/thoriumlxc/cmangos-tbc:bots-2025.05.11
+    container_name: tbc-realmd
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 3724:3724
+    volumes:
+      - ./etc:/opt/mangos/etc:Z
+      - ./data:/opt/mangos/data:ro,Z
+    networks:
+      - tbc-net
+    command: [./realmd]
+
+  mangosd:
+    image: docker.io/thoriumlxc/cmangos-tbc:bots-2025.05.11
+    container_name: tbc-mangosd
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 8085:8085
+    volumes:
+      - ./etc:/opt/mangos/etc:Z
+      - ./data:/opt/mangos/data:ro,Z
+      - ./source/build/src/mangosd/mangosd:/opt/mangos/bin/mangosd:ro,Z
+    networks:
+      - tbc-net
+    stdin_open: true
+    tty: true
+    command: [./mangosd]
+
+volumes:
+  db-data:
+
+networks:
+  tbc-net:
+    driver: bridge

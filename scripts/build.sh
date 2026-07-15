@@ -1,35 +1,35 @@
 #!/bin/bash
-# Build mangosd with playerbots on Steam Deck
+# Build mangosd with playerbots using multi-stage Docker build
+# IMPORTANT: Must build inside the Ubuntu 24.04 base image to match libs
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
-SOURCE_DIR="$PROJECT_DIR/source"
-BUILD_DIR="$SOURCE_DIR/build"
-INSTALL_DIR="$SOURCE_DIR/install"
+SCRIPT_DIR=/bin
+PROJECT_DIR=.
 
-echo "=== Building CMaNGOS TBC + Playerbots ==="
-echo "Source: $SOURCE_DIR"
-echo "Build:  $BUILD_DIR"
-echo ""
+echo === Building tbc-server:local ===
+echo Project: 
+echo 
 
-# Create build directory
-mkdir -p "$BUILD_DIR" "$INSTALL_DIR"
+cd 
 
-# Configure
-cd "$BUILD_DIR"
-cmake "$SOURCE_DIR/mangos-tbc" \
-    -DCMAKE_INSTALL_PREFIX="$INSTALL_DIR" \
-    -DPCH=1 \
-    -DBUILD_PLAYERBOTS=ON \
-    -DPLAYERBOTS_SOURCE_DIR="$SOURCE_DIR/playerbots" \
-    -DDEBUG=0
+# Apply patches first
+echo === Applying patches ===
+cd source/mangos-tbc
+git apply ../../patches/002-core-selfbot-fixes.patch 2>/dev/null || echo Already applied
+git apply ../../patches/003-20x-bg-marks.patch 2>/dev/null || echo Already applied
+cd ../playerbots
+git apply ../../patches/001-selfbot-bg-fixes.patch 2>/dev/null || echo Already applied
+git apply ../../patches/005-mount-interrupt-fix.patch 2>/dev/null || echo Already applied
+git apply ../../patches/006-playerbot-factory-infinite-loop.patch 2>/dev/null || echo Already applied
+git apply ../../patches/007-cloth-armor-fallback.patch 2>/dev/null || echo Already applied
+cd ../..
 
-# Build
-echo ""
-echo "=== Building mangosd ==="
-make -j$(nproc) mangosd
+# Build the image
+echo 
+echo === Building container image ===
+podman build --security-opt label=disable -t tbc-server:local -f Dockerfile .
 
-echo ""
-echo "=== Build complete ==="
-echo "Binary: $BUILD_DIR/src/mangosd/mangosd"
+echo 
+echo === Build complete ===
+echo Image: tbc-server:local
+echo To deploy: podman compose up -d
