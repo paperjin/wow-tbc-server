@@ -1,0 +1,39 @@
+diff --git a/playerbot/strategy/generic/RpgStrategy.cpp b/playerbot/strategy/generic/RpgStrategy.cpp
+index 0000000..0000000 100644
+--- a/playerbot/strategy/generic/RpgStrategy.cpp
++++ b/playerbot/strategy/generic/RpgStrategy.cpp
+@@ -1,3 +1,4 @@
++#include <vector>
+ #include "playerbot/playerbot.h"
+ #include "RpgStrategy.h"
+ #include "playerbot/strategy/actions/RpgSubActions.h"
+@@ -22,8 +23,28 @@ float RpgActionMultiplier::GetValue(Action* action)
+ 
+ void RpgStrategy::OnStrategyAdded(BotState state)
+ {
+-    ai->ChangeStrategy("+rpg quest,+rpg vendor,+rpg explore,+rpg maintenance,+rpg player,+rpg bg,+rpg guild,+rpg bank", state);
++    // Only add sub-strategies that aren't already in the engine.
++    // This prevents OnStrategyAdded from blindly re-adding sub-strategies
++    // the user explicitly removed with -rpg <sub>.
++    std::vector<std::string> subs = {
++        "rpg quest", "rpg vendor", "rpg explore", "rpg maintenance",
++        "rpg player", "rpg bg", "rpg guild", "rpg bank"
++    };
++
++    std::string toAdd;
++    for (const auto& sub : subs)
++    {
++        if (!ai->HasStrategy(sub, state))
++        {
++            if (!toAdd.empty()) toAdd += ",";
++            toAdd += "+" + sub;
++        }
++    }
++
++    if (!toAdd.empty())
++        ai->ChangeStrategy(toAdd, state);
+ }
++
+ void RpgStrategy::OnStrategyRemoved(BotState state) 
+ {
+     ai->ChangeStrategy("-rpg quest,-rpg vendor,-rpg explore,-rpg maintenance,-rpg player,-rpg bg,-rpg guild,-rpg bank", state);

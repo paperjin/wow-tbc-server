@@ -173,6 +173,7 @@ All 7 patches are in `/home/albert/tbc-server/patches/`. They must be applied to
 | 005 | mount-interrupt-fix | playerbots | Self-bots skip mounting in BGs |
 | 006 | factory-infinite-loop | playerbots | uint32 to int fix for equipment loop |
 | 007 | cloth-armor-fallback | playerbots | Any class can wear cloth as fallback |
+| 008 | rpg-flag-persistence | playerbots | User-removed RPG sub-flags (e.g. `-rpg quest`) persist across AI resets |
 
 ## SELinux on Bazzite
 
