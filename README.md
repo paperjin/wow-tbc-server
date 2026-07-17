@@ -19,12 +19,13 @@ CMaNGOS TBC WoW server with playerbots, running on Steam Deck via Podman.
 | # | Patch | File | What it does |
 |---|-------|------|-------------|
 | 001 | selfbot-bg-fixes | BattleGroundJoinAction.cpp, ReviveFromCorpseAction.cpp | Self-bots can queue BGs/arenas, use spirit healer |
-| 002 | core-selfbot-fixes | Player.cpp | Self-bots not kicked for AFK in BGs |
-| 003 | 20x-bg-marks | BattleGround.h | 60 marks for winners, 20 for losers |
+| 002 | core-selfbot-fixes | Player.cpp | Self-bots not kicked for AFK in BGs; 60/20 BG marks |
+| 003 | 20x-bg-marks | BattleGround.h | 60 marks for winners, 20 for losers (same as 002) |
 | 004 | eots-marks-db | spell_template (SQL) | EOTS marks via DB update |
-| 005 | mount-interrupt-fix | CheckMountStateAction.cpp | Self-bots skip mounting in BGs |
+| 005 | (removed - did not work) | - | Mount interrupt fix for self-bots - WIP |
 | 006 | factory-infinite-loop | PlayerbotFactory.cpp | uint32 to int fix for equipment loop |
 | 007 | cloth-armor-fallback | PlayerbotFactory.cpp | Any class can wear cloth as fallback |
+| 008 | rpg-flag-persistence | PlayerbotAI.cpp/.h, RpgStrategy.cpp | User-removed RPG sub-strategies stay removed on engine re-init |
 
 ## Build
 
@@ -72,9 +73,9 @@ git apply ../../patches/002-core-selfbot-fixes.patch
 git apply ../../patches/003-20x-bg-marks.patch
 cd ../playerbots
 git apply ../../patches/001-selfbot-bg-fixes.patch
-git apply ../../patches/005-mount-interrupt-fix.patch
 git apply ../../patches/006-playerbot-factory-infinite-loop.patch
 git apply ../../patches/007-cloth-armor-fallback.patch
+git apply ../../patches/008-rpg-flag-persistence-fix.patch
 cd ..
 ```
 
