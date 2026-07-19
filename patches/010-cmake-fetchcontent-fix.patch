@@ -1,0 +1,30 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index ddde74c2e..9bde2e66c 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -23,24 +23,7 @@ endif()
+ 
+ # Playerbots module
+ if(BUILD_PLAYERBOTS)
+-  include(FetchContent)
+-
+-  FetchContent_Declare(
+-    PlayerBots
+-    SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/modules/PlayerBots"
+-    GIT_REPOSITORY "https://github.com/cmangos/playerbots.git"
+-    GIT_TAG "master"
+-  )
+-
+-  FetchContent_GetProperties(PlayerBots)
+-  if (NOT playerbots_POPULATED)
+-    FetchContent_Populate(PlayerBots)
+-    message(STATUS "Playerbots module source dir: ${playerbots_SOURCE_DIR}")
+-  else()
+-    message(STATUS "Playerbots module already populated: ${playerbots_POPULATED}")
+-  endif()
+-
+-  add_subdirectory(${playerbots_SOURCE_DIR})
++  add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/modules/PlayerBots")
+ 
+ else()
+   if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/modules/PlayerBots)

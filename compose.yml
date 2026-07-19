@@ -18,7 +18,7 @@ services:
       start_period: 60s
 
   realmd:
-    image: docker.io/thoriumlxc/cmangos-tbc:bots-2025.05.11
+    image: localhost/tbc-server:local
     container_name: tbc-realmd
     restart: unless-stopped
     depends_on:
@@ -34,7 +34,7 @@ services:
     command: [./realmd]
 
   mangosd:
-    image: docker.io/thoriumlxc/cmangos-tbc:bots-2025.05.11
+    image: localhost/tbc-server:local
     container_name: tbc-mangosd
     restart: unless-stopped
     depends_on:
@@ -45,7 +45,6 @@ services:
     volumes:
       - ./etc:/opt/mangos/etc:Z
       - ./data:/opt/mangos/data:ro,Z
-      - ./source/build/src/mangosd/mangosd:/opt/mangos/bin/mangosd:ro,Z
     networks:
       - tbc-net
     stdin_open: true

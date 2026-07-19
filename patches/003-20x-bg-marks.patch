@@ -1,5 +1,5 @@
 diff --git a/src/game/BattleGround/BattleGround.h b/src/game/BattleGround/BattleGround.h
-index 00d55fd..a288203 100644
+index 00d55fd0c..a288203df 100644
 --- a/src/game/BattleGround/BattleGround.h
 +++ b/src/game/BattleGround/BattleGround.h
 @@ -82,8 +82,8 @@ enum BattleGroundMarks
