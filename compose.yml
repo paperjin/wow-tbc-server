@@ -51,6 +51,40 @@ services:
     tty: true
     command: [./mangosd]
 
+  ptr-realmd:
+    image: localhost/tbc-server:ptr
+    container_name: ptr-realmd
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 3725:3725
+    volumes:
+      - ./etc-ptr:/opt/mangos/etc:Z
+      - ./data:/opt/mangos/data:ro,Z
+    networks:
+      - tbc-net
+    command: [./realmd]
+
+  ptr-mangosd:
+    image: localhost/tbc-server:ptr
+    container_name: ptr-mangosd
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 8086:8086
+    volumes:
+      - ./etc-ptr:/opt/mangos/etc:Z
+      - ./data:/opt/mangos/data:ro,Z
+    networks:
+      - tbc-net
+    stdin_open: true
+    tty: true
+    command: [./mangosd]
+
 volumes:
   db-data:
 

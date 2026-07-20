@@ -25,8 +25,6 @@ CMaNGOS TBC WoW server with playerbots, running on Steam Deck via Podman.
 | 005 | (removed - did not work) | - | Mount interrupt fix for self-bots - WIP |
 | 006 | factory-infinite-loop | PlayerbotFactory.cpp | uint32 to int fix for equipment loop |
 | 007 | cloth-armor-fallback | PlayerbotFactory.cpp | Any class can wear cloth as fallback |
-| 008 | rpg-flag-persistence | PlayerbotAI.cpp/.h, RpgStrategy.cpp | User-removed RPG sub-strategies stay removed on engine re-init |
-| 009 | arena2v2-support | PlayerbotAI.cpp/.h, ArenaTeamAction.cpp, etc. | Self-bots can form 2v2 arena teams, queue, and fight |
 | 010 | cmake-fetchcontent-fix | src/CMakeLists.txt | Replace FetchContent with direct add_subdirectory for playerbots |
 
 ## Build
@@ -77,7 +75,6 @@ cd ../playerbots
 git apply ../../patches/001-selfbot-bg-fixes.patch
 git apply ../../patches/006-playerbot-factory-infinite-loop.patch
 git apply ../../patches/007-cloth-armor-fallback.patch
-git apply ../../patches/008-rpg-flag-persistence-fix.patch
 cd ..
 ```
 
@@ -87,6 +84,17 @@ cd ..
 cd /home/albert/tbc-server
 podman compose up -d
 ```
+
+## PTR Realm
+
+A separate PTR realm with patches 008 (rpg-flag-persistence) and 009 (arena2v2) is available on ports 3725/8086. Build with:
+
+```
+podman build --security-opt label=disable -t tbc-server:ptr -f Dockerfile.ptr .
+podman compose up -d ptr-realmd ptr-mangosd
+```
+
+See AGENTS.md for full PTR setup instructions.
 
 ## Data Transfer (from Proxmox)
 

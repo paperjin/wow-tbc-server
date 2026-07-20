@@ -26,7 +26,7 @@ This file documents the TBC WoW server for any Hermes agent (Llama, Bort, etc.) 
 │   ├── mangos-tbc/          # Core server source (cmangos/mangos-tbc)
 │   ├── playerbots/          # Playerbot module (cmangos/playerbots)
 │   └── build/               # Build artifacts (inside distrobox)
-├── patches/                 # All self-bot fixes (001-010)
+├── patches/                 # All self-bot fixes (001-007, 010)
 ├── etc/                     # Runtime configs (mounted into containers)
 │   ├── mangosd.conf
 │   ├── realmd.conf
@@ -46,6 +46,8 @@ This file documents the TBC WoW server for any Hermes agent (Llama, Bort, etc.) 
 | `tbc-db` | `mariadb:11` | — | MariaDB (all game data) |
 | `tbc-realmd` | `tbc-server:local` | 3724 | Login server |
 | `tbc-mangosd` | `tbc-server:local` | 8085 | World server |
+| `ptr-realmd` | `tbc-server:ptr` | 3725 | PTR login server (008+009 patches) |
+| `ptr-mangosd` | `tbc-server:ptr` | 8086 | PTR world server (008+009 patches) |
 
 ### Common Commands
 
@@ -80,7 +82,10 @@ All 13 databases from the old Proxmox server were migrated. Key ones:
 | `tbcrealmd` | Realm list, accounts, account access |
 | `tbcmangos` | World data (creatures, items, quests, etc.) |
 | `tbccharacters` | Characters, inventory, guilds, arena teams |
-| `tbclogs` | Server logs |
+| `ptrrealmd` | Realm list, accounts, account access (PTR) |
+| `ptrmangos` | World data (PTR) |
+| `ptrcharacters` | Characters, inventory, guilds, arena teams (PTR) |
+| `ptrlogs` | Server logs (PTR) |
 
 ### Useful Queries
 
@@ -162,7 +167,7 @@ make -j4 mangosd
 
 ## Patches
 
-All 9 patches are in `/home/albert/tbc-server/patches/`. They must be applied to fresh source before building. The Dockerfile applies them automatically via the source copy.
+All 7 patches are in `/home/albert/tbc-server/patches/`. They must be applied to fresh source before building. The Dockerfile applies them automatically via the source copy.
 
 | # | Patch | Applies to | What it does |
 |---|-------|-----------|-------------|
@@ -173,9 +178,47 @@ All 9 patches are in `/home/albert/tbc-server/patches/`. They must be applied to
 | 005 | mount-interrupt-fix | playerbots | Self-bots skip mounting in BGs |
 | 006 | factory-infinite-loop | playerbots | uint32 to int fix for equipment loop |
 | 007 | cloth-armor-fallback | playerbots | Any class can wear cloth as fallback |
-| 008 | rpg-flag-persistence | playerbots | User-removed RPG sub-flags (e.g. `-rpg quest`) persist across AI resets |
-| 009 | arena2v2-support | playerbots | Self-bots can form 2v2 arena teams, queue, and fight |
 | 010 | cmake-fetchcontent-fix | mangos-tbc | Replace FetchContent with direct add_subdirectory for playerbots module |
+
+## PTR Realm
+
+The PTR realm runs a separate build with patches 008 and 009 applied on top of the base patches. It uses separate databases (`ptrrealmd`, `ptrmangos`, `ptrcharacters`, `ptrlogs`) and separate ports (3725/8086).
+
+### Build PTR image
+
+```bash
+cd /home/albert/tbc-server
+podman build --security-opt label=disable -t tbc-server:ptr -f Dockerfile.ptr .
+```
+
+### Deploy PTR
+
+```bash
+cd /home/albert/tbc-server && podman compose up -d ptr-realmd ptr-mangosd
+```
+
+### Initialize PTR databases
+
+```bash
+# Create PTR databases
+podman exec -i tbc-db mariadb -u root --password=mangos <<'SQL'
+CREATE DATABASE IF NOT EXISTS ptrrealmd;
+CREATE DATABASE IF NOT EXISTS ptrmangos;
+CREATE DATABASE IF NOT EXISTS ptrcharacters;
+CREATE DATABASE IF NOT EXISTS ptrlogs;
+SQL
+
+# Import from main DB (or from a fresh dump)
+podman exec -i tbc-db mariadb -u root --password=mangos ptrrealmd < db_dump.sql
+# Then drop/rename databases as needed
+```
+
+### Add PTR realm to realmlist
+
+```sql
+INSERT INTO ptrrealmd.realmlist (id, name, address, port, icon, color, timezone, allowedSecurityLevel)
+VALUES (3, 'TBC PTR', '100.88.218.17', 3725, 2, 0, 1, 0);
+```
 
 ## SELinux on Bazzite
 
