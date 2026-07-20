@@ -1,5 +1,5 @@
 diff --git a/playerbot/PlayerbotFactory.cpp b/playerbot/PlayerbotFactory.cpp
-index 2f03556f..cc4b1c30 100644
+index 2f03556f..ce894e10 100644
 --- a/playerbot/PlayerbotFactory.cpp
 +++ b/playerbot/PlayerbotFactory.cpp
 @@ -2547,6 +2547,9 @@ bool PlayerbotFactory::CanEquipArmor(ItemPrototype const* proto)
@@ -12,3 +12,12 @@ index 2f03556f..cc4b1c30 100644
  
      if (bot->HasSkill(SKILL_PLATE_MAIL))
      {
+@@ -3240,7 +3243,7 @@ void PlayerbotFactory::InitEquipment(bool incremental, bool syncWithMaster, bool
+             else
+             {
+                 std::vector<uint32> ids;
+-                for (uint32 q = quality; q < ITEM_QUALITY_ARTIFACT; ++q)
++                for (int q = quality; q < (int)ITEM_QUALITY_ARTIFACT; ++q)
+                 {
+                     // quality selected from command
+                     if (setQuality && q != quality)
