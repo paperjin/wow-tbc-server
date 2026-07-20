@@ -1,8 +1,8 @@
 diff --git a/playerbot/PlayerbotFactory.cpp b/playerbot/PlayerbotFactory.cpp
-index 0000000..0000000 100644
+index 2f03556f..86eeab33 100644
 --- a/playerbot/PlayerbotFactory.cpp
 +++ b/playerbot/PlayerbotFactory.cpp
-@@ -3243,7 +3243,7 @@ bool PlayerbotFactory::CanEquipItem(uint8 slot, uint8& specId, ItemPrototype con
+@@ -3240,7 +3240,7 @@ void PlayerbotFactory::InitEquipment(bool incremental, bool syncWithMaster, bool
              else
              {
                  std::vector<uint32> ids;

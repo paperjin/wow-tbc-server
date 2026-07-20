@@ -1,8 +1,9 @@
 diff --git a/playerbot/strategy/actions/CheckMountStateAction.cpp b/playerbot/strategy/actions/CheckMountStateAction.cpp
-index 0000000..0000000 100644
+index d21441b4..21192e92 100644
 --- a/playerbot/strategy/actions/CheckMountStateAction.cpp
 +++ b/playerbot/strategy/actions/CheckMountStateAction.cpp
-@@ -275,7 +275,7 @@ bool CheckMountStateAction::isUseful()
+@@ -273,7 +273,7 @@ bool CheckMountStateAction::isUseful()
+         return false;
  
  #ifndef MANGOSBOT_ZERO
 -    if (bot->InArena())
