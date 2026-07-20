@@ -26,7 +26,7 @@ This file documents the TBC WoW server for any Hermes agent (Llama, Bort, etc.) 
 │   ├── mangos-tbc/          # Core server source (cmangos/mangos-tbc)
 │   ├── playerbots/          # Playerbot module (cmangos/playerbots)
 │   └── build/               # Build artifacts (inside distrobox)
-├── patches/                 # All self-bot fixes (001-007)
+├── patches/                 # All self-bot fixes (001-010)
 ├── etc/                     # Runtime configs (mounted into containers)
 │   ├── mangosd.conf
 │   ├── realmd.conf
@@ -162,7 +162,7 @@ make -j4 mangosd
 
 ## Patches
 
-All 7 patches are in `/home/albert/tbc-server/patches/`. They must be applied to fresh source before building. The Dockerfile applies them automatically via the source copy.
+All 9 patches are in `/home/albert/tbc-server/patches/`. They must be applied to fresh source before building. The Dockerfile applies them automatically via the source copy.
 
 | # | Patch | Applies to | What it does |
 |---|-------|-----------|-------------|
@@ -174,6 +174,8 @@ All 7 patches are in `/home/albert/tbc-server/patches/`. They must be applied to
 | 006 | factory-infinite-loop | playerbots | uint32 to int fix for equipment loop |
 | 007 | cloth-armor-fallback | playerbots | Any class can wear cloth as fallback |
 | 008 | rpg-flag-persistence | playerbots | User-removed RPG sub-flags (e.g. `-rpg quest`) persist across AI resets |
+| 009 | arena2v2-support | playerbots | Self-bots can form 2v2 arena teams, queue, and fight |
+| 010 | cmake-fetchcontent-fix | mangos-tbc | Replace FetchContent with direct add_subdirectory for playerbots module |
 
 ## SELinux on Bazzite
 

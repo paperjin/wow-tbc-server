@@ -26,6 +26,8 @@ CMaNGOS TBC WoW server with playerbots, running on Steam Deck via Podman.
 | 006 | factory-infinite-loop | PlayerbotFactory.cpp | uint32 to int fix for equipment loop |
 | 007 | cloth-armor-fallback | PlayerbotFactory.cpp | Any class can wear cloth as fallback |
 | 008 | rpg-flag-persistence | PlayerbotAI.cpp/.h, RpgStrategy.cpp | User-removed RPG sub-strategies stay removed on engine re-init |
+| 009 | arena2v2-support | PlayerbotAI.cpp/.h, ArenaTeamAction.cpp, etc. | Self-bots can form 2v2 arena teams, queue, and fight |
+| 010 | cmake-fetchcontent-fix | src/CMakeLists.txt | Replace FetchContent with direct add_subdirectory for playerbots |
 
 ## Build
 
