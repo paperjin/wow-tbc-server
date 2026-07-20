@@ -5,20 +5,9 @@ RUN rm -rf /var/lib/apt/lists/* && mkdir -p /var/lib/apt/lists/partial &&     ap
 
 COPY source/mangos-tbc /tmp/mangos-tbc
 COPY source/playerbots /tmp/playerbots
-COPY patches /tmp/patches
+COPY patches/009-arena2v2-support.patch /tmp/
 
-RUN cd /tmp/mangos-tbc && \
-    git apply /tmp/patches/002-core-selfbot-fixes.patch && \
-    git apply /tmp/patches/003-20x-bg-marks.patch && \
-    git apply /tmp/patches/010-cmake-fetchcontent-fix.patch
-
-RUN cd /tmp/playerbots && \
-    git apply /tmp/patches/001-selfbot-bg-fixes.patch && \
-    git apply /tmp/patches/005-mount-interrupt-fix.patch && \
-    git apply /tmp/patches/006-playerbot-factory-infinite-loop.patch && \
-    git apply /tmp/patches/007-cloth-armor-fallback.patch && \
-    git apply /tmp/patches/008-rpg-flag-persistence-fix.patch && \
-    git apply /tmp/patches/009-arena2v2-support.patch
+RUN cd /tmp/playerbots && git apply /tmp/009-arena2v2-support.patch
 
 RUN rm -rf /tmp/build && mkdir -p /tmp/build && cd /tmp/build &&     cmake /tmp/mangos-tbc -DCMAKE_INSTALL_PREFIX=/tmp/install     -DPCH=1 -DBUILD_PLAYERBOTS=ON -DPLAYERBOTS_SOURCE_DIR=/tmp/playerbots     -DDEBUG=0 &&     make -j4 mangosd
 
